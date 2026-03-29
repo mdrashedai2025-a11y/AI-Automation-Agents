@@ -1,0 +1,352 @@
+{
+  "name": "emadfurniture_Rag",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is IDEAL INNOVATION TRADING Co. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -432,
+        -80
+      ],
+      "id": "d590f264-6b6b-4dd7-ba29-c3ba529eb24d",
+      "name": "When chat message received",
+      "webhookId": "854c829c-2ce6-426f-89e2-ed44d33182f3"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=##Role:\n\nYou are a friendly AI assistant for IDEAL INNOVATION TRADING Co.\n\n##Task:\n\nYou answer customer questions about the furniture store and help them with their needs.\n\n##Details & Behavior:\n\n#Knowledge Source\n\nUse emadfurniture_q to answer questions about the company (opening hours, products, services, location, etc.).\n\n##Contact Collection\n\nWhenever a customer asks about opening hours, location, products, or general business information, politely request their:\n\nFull Name\n\nEmail Address\n\nPhone Number\n\nArea of Interest (e.g., sofas, beds, dining tables)\n\nStore this information in sheets for follow-up.\n\n##Product Inquiries\n\nWhen a client asks about a product, always ask for:\n\nSize (dimensions they need)\n\nStyle preference (modern, classic, custom)\n\nColor/Material preference\n\nBased on their request, provide the best matching furniture option.\n\nTone & Personality\n\nBe warm, professional, and solution-focused.\n\nAlways thank the client for their interest.\n\nOffer to connect them with a sales representative for personalized service.\n\n## also use googlesheet to bring the photos"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -48,
+        -80
+      ],
+      "id": "e9551448-aa9c-4f7f-b24c-b01d7e752252",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -208,
+        144
+      ],
+      "id": "a061c3d2-cd5b-42d6-8208-84f65939c90a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "1EGGXUcezHN6lKVu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 12
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        144
+      ],
+      "id": "f0e2d571-4558-49f4-ab36-2701622d6c4c",
+      "name": "Window Buffer Memory"
+    },
+    {
+      "parameters": {
+        "name": "emadfurniture_q",
+        "description": "gives answers related to the company emadfurniture"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        48,
+        144
+      ],
+      "id": "d7800ead-819e-46de-a1a7-f002674d9341",
+      "name": "goldsmith_q"
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "emadfurniture",
+          "mode": "list",
+          "cachedResultName": "emadfurniture"
+        },
+        "options": {
+          "pineconeNamespace": "Q&A"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        352
+      ],
+      "id": "c46552ae-3c0b-421f-b923-3f7076b1dc1b",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "f6pWcSItNTtd2a7O",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        352
+      ],
+      "id": "ce5cf455-c944-4b90-bd52-c60a8446d70f",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "1EGGXUcezHN6lKVu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        560
+      ],
+      "id": "7eb94000-7360-4d6b-9e8d-542620f934c2",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "1EGGXUcezHN6lKVu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1qxjOKZTfb716BnWDsQlEolZHM_3uptrutEGDJ8NR51g",
+          "mode": "list",
+          "cachedResultName": "emadfurniture_Lead",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qxjOKZTfb716BnWDsQlEolZHM_3uptrutEGDJ8NR51g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "الورقة1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qxjOKZTfb716BnWDsQlEolZHM_3uptrutEGDJ8NR51g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Name', ``, 'string') }}",
+            "Email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Email', ``, 'string') }}",
+            "Phone_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Phone_number', ``, 'string') }}",
+            "interested in": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('interested_in', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone_number",
+              "displayName": "Phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "interested in",
+              "displayName": "interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        336,
+        144
+      ],
+      "id": "8d64f542-52bf-45e7-b026-08227310fe90",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "EDIfPwyIIND6RZG3",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "goldsmith_q": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "goldsmith_q",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "goldsmith_q",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ac25a673-242d-4195-9679-6880546833ef",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e113e4f21386a2a5b0a8d8eea04d84c57b0ed8a79157a9f4caee8bef1387ddb7"
+  },
+  "id": "KwVf3gKFYuCeDY6s",
+  "tags": []
+}
